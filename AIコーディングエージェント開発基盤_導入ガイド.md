@@ -33,12 +33,19 @@ flowchart LR
     result["結果"]
 
     subgraph foundation["AIエージェントが利用する基盤機能"]
-        direction TB
+        foundationEntry["基盤機能"]
+
         instructions["AGENTS.md / CLAUDE.md<br/>常設指示・入口"]
         docs["プロジェクト文書<br/>READMEやdocsなど任意の配置"]
         skills["Skills<br/>再利用可能な作業手順"]
         mcp["MCP<br/>外部ツール・情報源への接続"]
         subagents["Subagents<br/>調査・レビュー・検証などの専門担当"]
+
+        foundationEntry -.->|読み込む| instructions
+        foundationEntry -.->|参照する| docs
+        foundationEntry -.->|手順を利用する| skills
+        foundationEntry -.->|外部接続に利用する| mcp
+        foundationEntry -.->|必要に応じて分業する| subagents
     end
 
     controls["Rules / Permissions / Hooks<br/>AIのツール利用を制御・検査"]
@@ -47,11 +54,7 @@ flowchart LR
     agent --> execution
     execution --> result
 
-    agent -.->|読み込む| instructions
-    agent -.->|参照する| docs
-    agent -.->|手順を利用する| skills
-    agent -.->|外部接続に利用する| mcp
-    agent -.->|必要に応じて分業する| subagents
+    agent -.->|利用する| foundationEntry
     controls -.->|操作全体を制御・検査する| agent
 ```
 
